@@ -15,7 +15,9 @@ public class MorseTranslator {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        System.out.println(" Please enter what you would like translate ");
+        System.out.println("             into Morse Code. ");
+        System.out.println(" ========================================== ");
     }
     
 }
