@@ -14,14 +14,6 @@ public class Signs {
     private String english;
     private String morse;
     
-    public void setEnglish (String english) {
-        this.english = english;
-    }
-    
-    public void setMorseSequence (String morseS) {
-        this.morse = morseS;
-    }
-    
     public String getEnglish() {
         return this.english;
     }

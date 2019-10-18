@@ -17,10 +17,6 @@ public class SignsController {
         this.model = model;
         this.view = view;
     }
-    
-    public String setEnglishSequence(String englishS) {
-        
-    }
 }
 
 
