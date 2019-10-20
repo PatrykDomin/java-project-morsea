@@ -12,6 +12,9 @@ import java.util.Scanner;
  * @author Patryk Domin
  */
 public class SignsController {
+    /**
+     * connectring model and view in the controller
+     */
     private Signs model;
     private SignsView view;
     Scanner scanner = new Scanner(System.in);
@@ -53,6 +56,9 @@ public class SignsController {
         view.printUserChoose(model.getUserChoose());
     }
     
+    /**
+     * checking if user choose correct type of text (morse or english)
+    */
     public void checkChoose (String choose) throws TypeOfInputException {
         if (!choose.equals("morse") && !(choose.equals("english"))) {
             throw new TypeOfInputException("You can choose only 'morse' or 'english'");
@@ -63,6 +69,9 @@ public class SignsController {
         // TODO regex 
    }
     
+    /**
+     * Scan inputs in case user don't give any args. 
+    */
     public void scanForEverything() {
         try {
             System.out.println("What type of text do you want to translate (morse or english)?");
