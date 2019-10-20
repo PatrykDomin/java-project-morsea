@@ -7,17 +7,41 @@ package morse.translator;
 
 /**
  *
- * @author Student
+ * @author Patryk Domin
  */
 public class MorseTranslator {
 
     /**
      * @param args the command line arguments
+     * 1st -> morse or english (you choose what type of text do you want to translate)
+     * 2nd -> text to translate (text should be between " " signs)
+     * Example args: english "text to translate"
      */
     public static void main(String[] args) {
-        System.out.println(" Please enter what you would like translate ");
-        System.out.println("             into Morse Code. ");
-        System.out.println(" ========================================== ");
+        Signs model = new Signs();
+        SignsView view = new SignsView();
+        SignsController controller = new SignsController(model, view);
+        
+        switch (args.length) {
+            case 0:
+                controller.scanForEverything();
+                break;
+            case 2:
+                try {
+                    controller.checkChoose(args[0]); 
+                    controller.setUserChoose(args[0]);
+                    controller.setUserInput(args[1]);
+                    controller.printUserChoose();
+                    controller.printUserInput();
+                }
+                catch (TypeOfInputException myExc) {
+                    System.out.println(myExc.getMessage());
+                }
+                break;
+            default:
+                System.err.println("There should be 0 or 2 parameter");
+                break;
+        }
     }
     
 }

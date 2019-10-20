@@ -7,14 +7,16 @@ package morse.translator;
 
 /**
  *
- * @author Student
+ * @author Patryk Domin
  */
-public class SignsView {
-   public void printEnglish(String englishSequence){
-      System.out.println("English sequence: " + englishSequence);
+public class SignsView {   
+   //print user choose 
+   public void printUserChoose(String choose) {
+       System.out.println("User choose: " + choose);
    }
    
-   public void printMorsea(String morseaSequence) {
-       System.out.println("Morsea sequence: " + morseaSequence);
+   //print user input (text to translate)
+   public void printUserInput(String userInpt) {
+       System.out.println("User input: " + userInpt);
    }
 }
