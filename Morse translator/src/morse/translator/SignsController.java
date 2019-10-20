@@ -10,6 +10,8 @@ import java.util.Scanner;
 /**
  *
  * @author Patryk Domin
+ * @version 1.0
+ * Controller
  */
 public class SignsController {
     /**
@@ -58,6 +60,8 @@ public class SignsController {
     
     /**
      * checking if user choose correct type of text (morse or english)
+     * @param choose - correct: english or morse
+     * @throws TypeOfInputException  when user give choose different than morse or english
     */
     public void checkChoose (String choose) throws TypeOfInputException {
         if (!choose.equals("morse") && !(choose.equals("english"))) {
@@ -65,9 +69,13 @@ public class SignsController {
         }
     }
     
+    /**
+     * TODO: function to check if the user input is correct
+     * @param input - user input (text to translate)
+     */
     public void checkInput(String input) {
         // TODO regex 
-   }
+    }
     
     /**
      * Scan inputs in case user don't give any args. 

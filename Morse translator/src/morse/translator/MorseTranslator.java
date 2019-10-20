@@ -8,13 +8,14 @@ package morse.translator;
 /**
  *
  * @author Patryk Domin
+ * @version 1.0
  */
 public class MorseTranslator {
 
     /**
      * @param args the command line arguments
-     * 1st -> morse or english (you choose what type of text do you want to translate)
-     * 2nd -> text to translate (text should be between " " signs)
+     * 1st - morse or english (you choose what type of text do you want to translate)
+     * 2nd - text to translate (text should be between " " signs)
      * Example args: english "text to translate"
      */
     public static void main(String[] args) {

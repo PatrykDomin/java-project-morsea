@@ -8,6 +8,8 @@ package morse.translator;
 /**
  *
  * @author Patryk Domin
+ * @version 1.0
+ * Model
  */
 
 public class Signs {
@@ -40,13 +42,15 @@ public class Signs {
     private String userChoose; 
     
     /**
-    * get whole english sequence (map)
+    * get whole english array
+    * @return english array
     */
     public String[] getEnglishSequence() {
         return this.english;
     }
     /**
-     * get whole morse sequence (map)
+     * get whole morse array
+     * @return morse array
      */
     public String[] getMorseSequence() {
         return this.morse;
@@ -54,12 +58,14 @@ public class Signs {
         
     /**
      * set user choose (morse or english)
+     * @param choose - user choose (correct: morse or english)
      */
     public void setUserChoose(String choose) {
         this.userChoose = choose;
     }
     /**
      * set user input (text to translate)
+     * @param input - user input (text to translate)
      */
     public void setUserInput(String input) {
         this.userInput = input;
@@ -67,12 +73,14 @@ public class Signs {
     
      /**
      * get user choose (morse or english)
+     * @return user choose (correct: morse or english)
      */
     public String getUserChoose() {
         return this.userChoose;
     }
     /**
      * get user input (text to translate)
+     * @return user input (text to translate)
      */
     public String getUserInput() {
         return this.userInput;

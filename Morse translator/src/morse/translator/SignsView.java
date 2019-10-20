@@ -8,17 +8,21 @@ package morse.translator;
 /**
  *
  * @author Patryk Domin
+ * @version 1.0
+ * View
  */
 public class SignsView {   
    /**
-    * print user choose (correct: english or morse)
+    * print user choose 
+    * @param choose - correct: english or morse
     */
    public void printUserChoose(String choose) {
        System.out.println("User choose: " + choose);
    }
    
    /**
-    * print user input (text to translate)
+    * print user input
+    * @param userInpt - text to translate
     */
    public void printUserInput(String userInpt) {
        System.out.println("User input: " + userInpt);

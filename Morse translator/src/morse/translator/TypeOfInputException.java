@@ -8,6 +8,8 @@ package morse.translator;
 /**
  *
  * @author Patryk Domin
+ * @version 1.0
+ * MyException
  */
 public class TypeOfInputException extends Exception {
     /**
