@@ -8,10 +8,18 @@ package morse.translator;
 /**
  *
  * @author Patryk Domin
- * @version 1.0
+ * @version 2.0
  */
 public class MorseTranslator {
 
+    /**
+     * enum with two values (correct user choose inputs)
+     */
+    public enum typeOfTranslation {
+        english, morse
+    }
+       
+    
     /**
      * @param args the command line arguments
      * 1st - morse or english (you choose what type of text do you want to translate)
@@ -22,6 +30,7 @@ public class MorseTranslator {
         Signs model = new Signs();
         SignsView view = new SignsView();
         SignsController controller = new SignsController(model, view);
+        
         
         switch (args.length) {
             case 0:
@@ -43,6 +52,19 @@ public class MorseTranslator {
                 System.err.println("There should be 0 or 2 parameter");
                 break;
         }
+        
+        typeOfTranslation tot = typeOfTranslation.valueOf(controller.getUserChoose());
+        
+        switch (tot) {
+            case english: 
+                System.out.println("You choose english");
+                break;
+            case morse:
+                System.out.println("You choose morse");
+                break;
+            default:
+                break;
+        }
+        
     }
-    
 }

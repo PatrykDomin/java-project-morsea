@@ -8,7 +8,7 @@ package morse.translator;
 /**
  *
  * @author Patryk Domin
- * @version 1.0
+ * @version 2.0
  * View
  */
 public class SignsView {   

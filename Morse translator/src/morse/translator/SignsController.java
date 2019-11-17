@@ -10,12 +10,12 @@ import java.util.Scanner;
 /**
  *
  * @author Patryk Domin
- * @version 1.0
+ * @version 2.0
  * Controller
  */
 public class SignsController {
     /**
-     * connectring model and view in the controller
+     * connecting model and view in the controller
      */
     private Signs model;
     private SignsView view;
@@ -26,14 +26,6 @@ public class SignsController {
         this.view = view;
     }
     
-    public String[] getEnglishSequence() {
-        return model.getEnglishSequence();
-    }
-    
-    public String[] getMorseSequence() {
-        return model.getMorseSequence();
-    }
-    
     public void setUserChoose(String choose) {
         model.setUserChoose(choose);
     }
@@ -42,12 +34,12 @@ public class SignsController {
         model.setUserInput(userInpt);
     }
     
-    public void getUserChoose() {
-        model.getUserChoose();
+    public String getUserChoose() {
+        return model.getUserChoose();
     }
     
-    public void getUserInput() {
-        model.getUserInput();
+    public String getUserInput() {
+        return model.getUserInput();
     }
     
     public void printUserInput() {
@@ -56,6 +48,22 @@ public class SignsController {
     
     public void printUserChoose() {
         view.printUserChoose(model.getUserChoose());
+    }
+    
+    public int signIndexEnglish(String sign) {
+        return model.signIndexEnglish(sign);
+    }
+    
+    public int signIndexMorse(String sign) {
+        return model.signIndexMorse(sign);
+    }
+    
+    public String changeSignFromEnglish(int index) {
+        return model.changeSignFromEnglish(index);
+    }
+    
+    public String changeSignFromMorse (int index) {
+        return model.changeSignFromMorse(index);
     }
     
     /**
@@ -70,11 +78,28 @@ public class SignsController {
     }
     
     /**
+     * function to check if the user input is correct
+     * @param input - user input (text to translate)
+     * @return true if input is correct
+     */
+    public boolean checkInputEnglish(String input) {
+        char[] tmparr = input.toCharArray();
+        for (int i = 0; i < input.length(); i++) {
+            String sign = String.valueOf(tmparr[i]);
+            if (model.signIndexEnglish(sign) == -1) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
      * TODO: function to check if the user input is correct
      * @param input - user input (text to translate)
+     * @return true if input is correct
      */
-    public void checkInput(String input) {
-        // TODO regex 
+    public boolean checkInputMorse (String input) {
+        return true;
     }
     
     /**
@@ -86,9 +111,10 @@ public class SignsController {
             String type = scanner.nextLine();
             this.checkChoose(type);
             setUserChoose(type);
-            System.out.println("Write your text to translate");
+            System.out.println("Write your text to translate (if you want to write morse text use '/' sign as a space between characters and '//' as a space between words");
+            System.out.println("You can use signs like : '.', ',' or '?' ");
             String userText = scanner.nextLine();
-            setUserInput(userText); 
+            setUserInput(userText);
         }
         catch (TypeOfInputException myExc) {
             System.out.println(myExc.getMessage());
