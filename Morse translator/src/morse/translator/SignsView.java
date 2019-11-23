@@ -27,4 +27,11 @@ public class SignsView {
    public void printUserInput(String userInpt) {
        System.out.println("User input: " + userInpt);
    }
+   
+   /**
+    * question to the user about type of text to translate
+    */
+   public void printQuestion() {
+       System.out.println("What type of text do you want to translate (morse or english)?");
+   }
 }

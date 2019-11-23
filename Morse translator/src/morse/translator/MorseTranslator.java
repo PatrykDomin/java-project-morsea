@@ -40,7 +40,11 @@ public class MorseTranslator {
                 try {
                     controller.checkChoose(args[0]); 
                     controller.setUserChoose(args[0]);
-                    controller.setUserInput(args[1]);
+                    controller.setUserInput(args[1].toLowerCase());
+                    if(!(controller.checkInputEnglish(controller.getUserInput()) || controller.checkInputMorse(controller.getUserInput()))) {
+                        System.out.println("Your input is wrong.");
+                        return;
+                    }
                     controller.printUserChoose();
                     controller.printUserInput();
                 }
