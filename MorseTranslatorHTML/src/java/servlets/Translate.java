@@ -7,6 +7,11 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +25,7 @@ import view.View;
  * Servlet, that translate user input to morse or english
  *
  * @author Patryk Domin
- * @version 1.0
+ * @version 2.0
  */
 public class Translate extends HttpServlet {
     /**
@@ -52,8 +57,8 @@ public class Translate extends HttpServlet {
         }
         useCookies(view, request, response);
         String inputText = request.getParameter("text1");
+        view.setUserInput(inputText);
         doTranslation(translator, view, inputText);
-        view.setUserInput("");
         try (PrintWriter out = response.getWriter()) {
             view.createResponse();
             out.println(view.getResponse());
@@ -61,7 +66,30 @@ public class Translate extends HttpServlet {
         session.setAttribute("translator", translator);
         session.setAttribute("view", view);
     }
-
+  
+    /**
+     * insert data to the data base 
+     * @param input - text to translate
+     * @param output - trasnlated text
+     */
+    private void insertData(String input, String output) {
+        try {
+            // loading the JDBC driver
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+        } catch (ClassNotFoundException cnfe) {
+            System.err.println(cnfe.getMessage());
+            return;
+        }
+        // make a connection to DB
+        try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/MorseEnglishDB", "patryk", "patryk")) {
+            Statement statement = con.createStatement();
+            statement.executeUpdate("INSERT INTO tabela VALUES (5, '" + input + "' , '" + output + "' )");
+            
+        } catch (SQLException sqle) {
+            System.err.println(sqle.getMessage());
+        }
+    }
+    
     /**
      * Translate input text (from english to morse and from morse to english)
      *
@@ -70,6 +98,8 @@ public class Translate extends HttpServlet {
      * @param inputText text to translate.
      */
     private void doTranslation(Translator translator, View view, String inputText) {
+        view.setTranslatedText("");
+        translator.setTranslatedText("");
         boolean engToMorse = translator.getTranslateDirection();
         char[] tmpUserInput = inputText.toCharArray(); 
         String translatedText = "";
@@ -100,11 +130,11 @@ public class Translate extends HttpServlet {
             if (correct) {
                 view.setTranslatedText(translatedText);
                 translator.setTranslatedText(translatedText);
-                String newTranslation = translator.addNewTranslation();
-                if (!newTranslation.isEmpty()) {
-                    view.addNewTranslation(newTranslation);
-                } 
-            } 
+                insertData(inputText, translatedText);
+            } else {
+                view.setTranslatedText("");
+                translator.setTranslatedText("");
+            }
         }
     }
 

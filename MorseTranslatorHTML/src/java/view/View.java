@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Creates view as a html page to servlet request
  * @author Patryk Domin
- * @version 1.0
+ * @version 2.0
  */
 public class View {
     
@@ -105,9 +105,9 @@ public class View {
      * @param newTranslation String, containing newest translation.
      */
     public void addNewTranslation (String newTranslation) {
-        if (history.size() >= 10) {
-            history.remove(0);
-        }
+//        if (history.size() >= 10) {
+//            history.remove(0);
+//        }
         history.add("<li> " + newTranslation + "</li>");
     }
     
@@ -150,9 +150,14 @@ public class View {
                 + "            <form action=\"Clear\" method=\"POST\">\n"
                 + "                <input class=\"button\" id=\"clear\" type=\"submit\" value=\"Clear History\" />\n" 
                 + "            </form>\n" 
-                + "            <div id=\"error\">" + errorMsg +  "</div>\n" 
+                + "            <div id=\"error\">" + errorMsg +  "</div>\n"
+                + "            <form  action=\"Select\" method=\"POST\">"
+                + "                <input class=\"button\" id=\"select\" type=\"submit\" value=\"Update and show history\">"
+                + "            \n"
                 + "            <h4 id=\"historyLabel\">History of translations:</h4>\n" 
-                + "            <div class=\"historyDiv\">" + historyHTML + "</div>\n"
+                + "            <div class=\"historyDiv\">" 
+                +               historyHTML 
+                + "            </div>\n"
                 + "            <h5 id=\"cookie\"> You made " + translationNumber + " translations </h5>\n"
                 + "        </div>\n"
                 + "    </body>\n"

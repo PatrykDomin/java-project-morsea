@@ -186,21 +186,27 @@ class SingleService implements Closeable {
             System.out.println("Client wrote text to translate");
             typeOfTranslation tot = typeOfTranslation.valueOf(mtm.getUserChoose());
             boolean correct = false;
+            char[] tmpUserInput = userInpt.toCharArray(); 
+            String translatedText = "";
             switch (tot) {
                 case english:
                     if (mtm.checkInputEnglish(userInpt)) {
                         correct = !correct;
+                        mtm.setUserInput(userInpt);
+                        for (char element : tmpUserInput) {
+                           translatedText += String.valueOf(mtm.changeSignFromEnglish(mtm.signIndexEnglish(element)));
+                        }
                     }
                     break;
                 case morse:
                     if (mtm.checkInputMorse(userInpt)) {
                         correct = !correct;
+                        mtm.setUserInput(userInpt);
                     }
                     break;
             }
             if(correct) {
-                mtm.setUserInput(userInpt);
-                output.println(mtm.getUserInput());
+                output.println(translatedText);
             } else {
                 output.println("Wrong input");
             }

@@ -17,7 +17,7 @@ import server.MorseTranslatorModel;
 public class ModelTests {
      
      MorseTranslatorModel instance = new MorseTranslatorModel();
-     String sign;
+     char sign;
      int index;
      
     /**
@@ -32,7 +32,7 @@ public class ModelTests {
          * expected: -1
          */
         try {
-            sign = "";
+            sign = ' ';
             int result = instance.signIndexEnglish(sign);
             int expected = -1;
             assertThat(result, is(expected));
@@ -44,7 +44,7 @@ public class ModelTests {
          * expected: 111
          */
         try {
-            sign = " ";
+            sign = ' ';
             int result = instance.signIndexEnglish(sign);
             int expected = 111;
             assertThat(result, is(expected));
@@ -56,7 +56,7 @@ public class ModelTests {
          * expected: 0
          */
         try {
-           sign = "a";
+           sign = 'a';
            int result = instance.signIndexEnglish(sign);
            int expected = 0;
            assertThat(result, is(expected));
@@ -68,7 +68,7 @@ public class ModelTests {
          * expected: -1
          */
         try {
-           sign = "WrongOne";
+           sign = '&';
            int result = instance.signIndexEnglish(sign);
            int expected = -1;
            assertThat(result, is(expected));

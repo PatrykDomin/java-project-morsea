@@ -5,22 +5,17 @@
  */
 package morse.translator;
 
-import static java.util.Optional.empty;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
-import org.junit.Before;
 
 /**
- *
  * @author Patryk Domin
  * @version 2.0
  * Tests
  */
 public class SignsTest {
-
+     
      Signs instance = new Signs();
      String sign;
      int index;

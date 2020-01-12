@@ -5,8 +5,7 @@
  */
 package morse.translator;
 import java.util.Scanner;
-//import java.util.regex.Matcher;
-//import java.util.regex.Pattern; //to use in checking user input
+
 /**
  *
  * @author Patryk Domin
@@ -148,6 +147,17 @@ public class SignsController {
      * @return true if input is correct
      */
     public boolean checkInputMorse (String input) {
+        char[] temparr = input.toCharArray();
+        String signSequence = "";
+        for (int i=0; i<input.length(); i++) {
+             if (temparr[i] == '/') {
+                 signSequence = "";
+                 if (i + 1 == input.length()) {
+                     return true;
+                 }
+             }
+            signSequence += String.valueOf(temparr[i]);
+        }
         return false;
     }
     

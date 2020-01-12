@@ -91,13 +91,13 @@ public class MorseTranslatorModel {
      * @param sign - a sign to get an index from
      * @return index as int, -1 if no sign will be found, 111 if sign is a spacebar
      */
-    public int signIndexEnglish(String sign) {
-        if (sign.equals(" ")) {
+    public int signIndexEnglish(char sign) {
+        if (sign == ' ') {
             return 111;
         } else {
             int i = 0;
             for (String element : english) {
-                if (element.equals(sign)) {
+                if (element.equals(String.valueOf(sign))) {
                     return i;
                 }
                 i++;
@@ -120,7 +120,7 @@ public class MorseTranslatorModel {
             default:
                 int i = 0;
                 for (String element : morse) {
-                if (element.equals(sign)) {
+                if (element.equals(String.valueOf(sign))) {
                     return i;
                 }
                 i++;
@@ -132,13 +132,13 @@ public class MorseTranslatorModel {
     /**
      * replace one single character in english with its equivalent in morse 
      * @param index of en element from english array
-     * @return space if index is 111, morse signt with the same index or null if index is valid
+     * @return "//" if index is 111, morse signt with the same index or null if index is valid
      */
     public String changeSignFromEnglish(int index) {
         if (index == 111) {
-            return " ";
+            return "/";
         } else if (index >= 0 && index < english.size()) { 
-            return morse.get(index);
+            return (morse.get(index) + "/");
         }
         return null;
     }
@@ -167,8 +167,7 @@ public class MorseTranslatorModel {
     public boolean checkInputEnglish(String input) {
         char[] tmparr = input.toCharArray();
         for (int i = 0; i < input.length(); i++) {
-            String sign = String.valueOf(tmparr[i]);
-            if (signIndexEnglish(sign) == -1) {
+            if (signIndexEnglish(tmparr[i]) == -1) {
                 return false;
             }
         }
@@ -182,12 +181,14 @@ public class MorseTranslatorModel {
      */
     public boolean checkInputMorse (String input) {
         char[] temparr = input.toCharArray();
+        int tmp = 0;
         String signSequence = "";
         for (int i=0; i<input.length(); i++) {
-             if (temparr[i] == '/') {
-                 signSequence = "";
-                 if (i + 1 == input.length()) {
-                     return true;
+            tmp = i;
+            if (temparr[i] == '/') {
+                signSequence = "";
+                if (i + 1 == input.length()) {
+                    return true;
                  }
              }
             signSequence += String.valueOf(temparr[i]);

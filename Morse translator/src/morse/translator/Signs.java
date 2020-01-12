@@ -5,13 +5,12 @@
  */
 package morse.translator;
 import java.util.*;
+
 /**
- *
  * @author Patryk Domin
  * @version 2.0
  * Model
  */
-
 public class Signs {
     /**
      * List of characters used in translating user's text

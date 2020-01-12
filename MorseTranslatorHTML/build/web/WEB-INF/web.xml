@@ -12,6 +12,10 @@
         <servlet-name>Clear</servlet-name>
         <servlet-class>servlets.Clear</servlet-class>
     </servlet>
+     <servlet>
+        <servlet-name>Select</servlet-name>
+        <servlet-class>servlets.Select</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Translate</servlet-name>
         <url-pattern>/Translate</url-pattern>
@@ -23,5 +27,9 @@
     <servlet-mapping>
         <servlet-name>Clear</servlet-name>
         <url-pattern>/Clear</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Select</servlet-name>
+        <url-pattern>/Select</url-pattern>
     </servlet-mapping>
 </web-app>
