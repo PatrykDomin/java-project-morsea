@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +45,7 @@ public class Select extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         Translator translator;
         View view;
+        ServletContext context = this.getServletContext();
         HttpSession session = request.getSession(true);
         Object sessionTranslator = session.getAttribute("translator");
         Object sessionView = session.getAttribute("view");
@@ -58,7 +60,7 @@ public class Select extends HttpServlet {
             view = (View) sessionView;
         }
         view.setErrorMsg("");
-        selectData(view, translator);
+        selectData(view, translator, context);
         try (PrintWriter out = response.getWriter()) {
             view.createResponse();
             out.println(view.getResponse());
@@ -71,18 +73,19 @@ public class Select extends HttpServlet {
      * selec data from the database to display it
      * @param translator reference to model
      * @param view reference to view 
+     * @param context servlet context to get context-param from xml file
      */
-    private void selectData(View view, Translator translator) {
+    private void selectData(View view, Translator translator, ServletContext context) {
        try {
             // loading the JDBC driver
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Class.forName(context.getInitParameter("driver"));
         } catch (ClassNotFoundException cnfe) {
             System.err.println(cnfe.getMessage());
             return;
         }
 
         // make a connection to DB
-        try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/MorseEnglishDB", "patryk", "patryk")) {
+        try (Connection con = DriverManager.getConnection(context.getInitParameter("url"), context.getInitParameter("login"), context.getInitParameter("password"))) {
             Statement statement = con.createStatement();
            // Przeglądamy otrzymane wyniki
            translator.clearHistory();

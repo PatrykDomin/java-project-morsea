@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +44,7 @@ public class Clear extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         Translator translator;
         View view;
+        ServletContext context = this.getServletContext();
         HttpSession session = request.getSession(true);
         Object sessionTranslator = session.getAttribute("translator");
         Object sessionView = session.getAttribute("view");
@@ -59,7 +61,7 @@ public class Clear extends HttpServlet {
         view.setErrorMsg("");
         translator.clearHistory();
         view.clearHistory();
-        deleteData();
+        deleteData(context);
         try (PrintWriter out = response.getWriter()) {
             view.createResponse();
             out.println(view.getResponse());
@@ -70,19 +72,20 @@ public class Clear extends HttpServlet {
     
     /**
      * delete data from the database
+     * @param context servlet context to get context-param from xml file
      */
-    private void deleteData() {
+    private void deleteData(ServletContext context) {
         
         try {
             // loading the JDBC driver
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Class.forName(context.getInitParameter("driver"));
         } catch (ClassNotFoundException cnfe) {
             System.err.println(cnfe.getMessage());
             return;
         }
 
         // make a connection to DB
-        try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/MorseEnglishDB", "patryk", "patryk")) {
+        try (Connection con = DriverManager.getConnection(context.getInitParameter("url"), context.getInitParameter("login"), context.getInitParameter("password"))) {
             Statement statement = con.createStatement();
             // Usuwamy dane z tabeli
             statement.executeUpdate("DELETE FROM tabela");

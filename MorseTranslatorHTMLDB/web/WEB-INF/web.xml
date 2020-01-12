@@ -32,4 +32,22 @@
         <servlet-name>Select</servlet-name>
         <url-pattern>/Select</url-pattern>
     </servlet-mapping>
+    
+    <context-param>
+        <param-name>driver</param-name>
+        <param-value>org.apache.derby.jdbc.ClientDriver</param-value>
+    </context-param>
+    <context-param>
+        <param-name>url</param-name>
+        <param-value>jdbc:derby://localhost:1527/MorseEnglishDB</param-value>
+    </context-param>
+    <context-param>
+        <param-name>login</param-name>
+        <param-value>patryk</param-value>
+    </context-param>
+    <context-param>
+        <param-name>password</param-name>
+        <param-value>patryk</param-value>
+    </context-param>
+    
 </web-app>

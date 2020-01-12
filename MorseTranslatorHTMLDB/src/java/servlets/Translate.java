@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -40,10 +41,11 @@ public class Translate extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         Translator translator;
-        View view;
+        View view;        
+        ServletContext context = this.getServletContext();
         HttpSession session = request.getSession(true);
         if (session.isNew()) {
-            createTable();
+            createTable(context);
         }
         Object sessionModel = session.getAttribute("translator");
         Object sessionView = session.getAttribute("view");
@@ -57,11 +59,10 @@ public class Translate extends HttpServlet {
         } else {
             view = (View) sessionView;
         }
-        
         useCookies(view, request, response);
         String inputText = request.getParameter("text1");
         view.setUserInput(inputText);
-        doTranslation(translator, view, inputText);
+        doTranslation(translator, view, inputText, context);
         try (PrintWriter out = response.getWriter()) {
             view.createResponse();
             out.println(view.getResponse());
@@ -69,21 +70,21 @@ public class Translate extends HttpServlet {
         session.setAttribute("translator", translator);
         session.setAttribute("view", view);
     }
-  
+    
     /**
      * create a new table in database
+     * @param context servlet context to get context-param from xml file
      */
-    private void createTable() {
+    private void createTable(ServletContext context) {
         try {
             // loading the JDBC driver
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Class.forName(context.getInitParameter("driver"));
         } catch (ClassNotFoundException cnfe) {
             System.err.println(cnfe.getMessage());
             return;
         }
-
         // make a connection to DB
-        try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/MorseEnglishDB", "patryk", "patryk")) {
+        try (Connection con = DriverManager.getConnection(context.getInitParameter("url"), context.getInitParameter("login"), context.getInitParameter("password"))) {
             Statement statement = con.createStatement();
             statement.executeUpdate("CREATE TABLE tabela "
                     + "(userinput VARCHAR(350), "
@@ -98,8 +99,9 @@ public class Translate extends HttpServlet {
      * insert data to the data base 
      * @param input - text to translate
      * @param output - trasnlated text
+     * @param context servlet context to get context-param from xml file
      */
-    private void insertData(String input, String output) {
+    private void insertData(String input, String output, ServletContext context) {
         try {
             // loading the JDBC driver
             Class.forName("org.apache.derby.jdbc.ClientDriver");
@@ -122,9 +124,10 @@ public class Translate extends HttpServlet {
      *
      * @param translator reference to model
      * @param view reference to view
-     * @param inputText text to translate.
+     * @param inputText text to translate
+     * @param context servlet context to get context-param from xml file
      */
-    private void doTranslation(Translator translator, View view, String inputText) {
+    private void doTranslation(Translator translator, View view, String inputText, ServletContext context) {
         view.setTranslatedText("");
         translator.setTranslatedText("");
         boolean engToMorse = translator.getTranslateDirection();
@@ -157,7 +160,7 @@ public class Translate extends HttpServlet {
             if (correct) {
                 view.setTranslatedText(translatedText);
                 translator.setTranslatedText(translatedText);
-                insertData(inputText, translatedText);
+                insertData(inputText, translatedText, context);
             } else {
                 view.setTranslatedText("");
                 translator.setTranslatedText("");
