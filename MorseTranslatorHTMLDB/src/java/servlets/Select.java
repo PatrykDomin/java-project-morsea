@@ -7,17 +7,24 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import javax.servlet.ServletContext;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import model.Tabelajpa;
 import model.Translator;
 import view.View;
 
@@ -28,6 +35,11 @@ import view.View;
  * @version 1.0
  */
 public class Select extends HttpServlet {
+
+    @PersistenceContext(unitName = "MorseTranslatorHTMLPU")
+    private EntityManager em;
+    @Resource
+    private javax.transaction.UserTransaction utx;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,7 +57,6 @@ public class Select extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         Translator translator;
         View view;
-        ServletContext context = this.getServletContext();
         HttpSession session = request.getSession(true);
         Object sessionTranslator = session.getAttribute("translator");
         Object sessionView = session.getAttribute("view");
@@ -60,7 +71,7 @@ public class Select extends HttpServlet {
             view = (View) sessionView;
         }
         view.setErrorMsg("");
-        selectData(view, translator, context);
+        selectData(view, translator);
         try (PrintWriter out = response.getWriter()) {
             view.createResponse();
             out.println(view.getResponse());
@@ -70,39 +81,40 @@ public class Select extends HttpServlet {
     }
     
     /**
+     * func generated with Use Entity Manager
+     * @param object - object to commit
+     */
+    public void persist(Object object) {
+        try {
+            utx.begin();
+            em.persist(object);
+            utx.commit();
+        } catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException | NotSupportedException | RollbackException | SystemException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", e);
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
      * selec data from the database to display it
      * @param translator reference to model
      * @param view reference to view 
      * @param context servlet context to get context-param from xml file
      */
-    private void selectData(View view, Translator translator, ServletContext context) {
-       try {
-            // loading the JDBC driver
-            Class.forName(context.getInitParameter("driver"));
-        } catch (ClassNotFoundException cnfe) {
-            System.err.println(cnfe.getMessage());
-            return;
+    private void selectData(View view, Translator translator) {
+     
+        translator.clearHistory();
+        view.clearHistory();
+        Query query = em.createNamedQuery("Tabelajpa.findAll");
+        List<Tabelajpa> history = query.getResultList();
+        
+        for (Tabelajpa ele : history) {
+            String in = ele.getUserinput();
+            String ou = ele.getUseroutput();
+            String listItem = translator.addNewTranslation(in, ou);
+            view.addNewTranslation(listItem);
         }
-
-        // make a connection to DB
-        try (Connection con = DriverManager.getConnection(context.getInitParameter("url"), context.getInitParameter("login"), context.getInitParameter("password"))) {
-            Statement statement = con.createStatement();
-           // Przeglądamy otrzymane wyniki
-           translator.clearHistory();
-           view.clearHistory();
-           try (ResultSet rs = statement.executeQuery("SELECT * FROM tabela")) {
-               // Przeglądamy otrzymane wyniki
-               while (rs.next()) {
-                   String in = rs.getString("userinput");
-                   String ou = rs.getString("useroutput");
-                   String listItem = translator.addNewTranslation(in, ou);
-                   view.addNewTranslation(listItem);
-               }
-               System.out.println("-----------------------------------");
-           }
-        } catch (SQLException sqle) {
-            System.err.println(sqle.getMessage());
-        }
+        
    }
     
     
@@ -144,4 +156,6 @@ public class Select extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    
 }
